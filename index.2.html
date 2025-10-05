@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طباعة البطاقات المزدوجة</title>
+    <title>طباعة البطاقات المزدوجة v3 </title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -247,6 +247,11 @@
         }
 
         @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
             body {
                 background: white;
                 padding: 0;
@@ -255,6 +260,8 @@
 
             .container {
                 max-width: none;
+                background: white;
+                padding: 0;
             }
 
             .header, .input-group, .font-slider-container, .print-btn, .tip {
@@ -262,13 +269,32 @@
             }
 
             .print-page {
-                width: 100% !important;
-                height: 100% !important;
+                width: 10cm !important;
+                height: 15cm !important;
                 margin: 0 !important;
                 padding: 0 !important;
                 page-break-after: avoid;
                 box-shadow: none !important;
                 border-radius: 0 !important;
+                position: relative !important;
+                display: block !important;
+            }
+
+            .label {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+            }
+
+            .cut-line {
+                display: block !important;
+                visibility: visible !important;
+            }
+
+            .arabic-name, .english-name, .barcode-container, .barcode-svg, .barcode-number {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
             }
 
             @page {
@@ -347,11 +373,13 @@
             flex-direction: column;
             align-items: center;
             margin-top: 5px;
+            page-break-inside: avoid;
         }
 
         .barcode-svg {
             max-width: 90%;
             height: auto;
+            display: block;
         }
 
         .barcode-number {
@@ -360,6 +388,7 @@
             color: #1a1a1a;
             margin-top: 2px;
             letter-spacing: 1px;
+            display: block;
         }
 
         @media (max-width: 768px) {
@@ -465,7 +494,6 @@
                 labelArabic: 'اسم المنتج بالعربي',
                 labelEnglish: 'اسم المنتج بالإنجليزي',
                 labelBarcode: 'Barcode / الباركود',
-                generateText: 'توليد / Generate',
                 barcodeHint: '6-20 digits only',
                 fontSizeLabel: 'حجم الخط / Font Size',
                 printText: 'Print / طباعة',
@@ -478,7 +506,6 @@
                 labelArabic: 'Product Name (Arabic)',
                 labelEnglish: 'Product Name (English)',
                 labelBarcode: 'Barcode',
-                generateText: 'Generate',
                 barcodeHint: '6-20 digits only',
                 fontSizeLabel: 'Font Size',
                 printText: 'Print',
@@ -531,16 +558,6 @@
                 tempInput.focus();
                 alert('يرجى استخدام Ctrl+V للصق\nPlease use Ctrl+V to paste');
             }
-        }
-
-        function generateRandomBarcode() {
-            const length = 12;
-            let barcode = '';
-            for (let i = 0; i < length; i++) {
-                barcode += Math.floor(Math.random() * 10);
-            }
-            document.getElementById('barcode').value = barcode;
-            updateLabel();
         }
 
         function updateFontSize() {
